@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<title>Custom Journey Builder Activity</title>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script
+			type="text/javascript"
+			src="js/require.js"
+			data-main="js/customActivity"
+		></script>
+		<!-- Enlace a los archivos externos de CSS y JS -->
+		<link rel="stylesheet" href="css/styles.css">
+		<script type="text/javascript" src="js/activity.js"></script>
+	</head>
+
+	<body>
+		<div>
+			<form id="activityForm">
+				<label for="linearemitente">Línea Remitente</label>
+				<select id="linearemitente">
+					<option value="ea76e4d2_3c46_438b_9d69_7185e401e48a">
+						Ferreyros - Campañas MKT
+					</option>
+					<option value="Orvisa">Linea Orvisa</option>
+					<option value="Unimaq">Linea Unimaq</option>
+				</select>
+				<br /><br />
+
+				<label for="plantilla">Nombre plantilla</label>
+				<input
+					type="text"
+					id="plantilla"
+					placeholder="Ingrese el nombre de la plantilla"
+				/>
+				<br /><br />
+
+				<label> <input type="checkbox" id="hasImage" />¿Incluye imagen? </label>
+				<br /><br />
+				<div id="imageOptions" style="display: none">
+					<label for="imageFormat">Formato de imagen:</label>
+					<select id="imageFormat">
+						<option value="JPG">JPG</option>
+						<option value="PNG">PNG</option>
+					</select>
+					<br /><br />
+					<label for="DEimagelink">Variable Extensión de datos</label>
+					<select name="DEimagelink" id="DEimagelink">
+						<option value="">Seleccione una opción</option>
+					</select>
+					<br /><br />
+					<label for="imageLink"
+						>Si la imagen no se encuentra en la Extensión de datos ingrese a
+						continuación el enlace</label
+					>
+					<input
+						type="text"
+						id="imageLink"
+						placeholder="Ingrese el enlace de la imagen"
+					/>
+				</div>
+
+				<div id="variable1" style="display: none">
+					<label for="DEvariable1">Variable 1</label><br />
+					<div class="variable-group">
+						<select name="DEvariable1" id="DEvariable1">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete1" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<div id="variable2" style="display: none">
+					<label for="DEvariable2">Variable 2</label><br />
+					<div class="variable-group">
+						<select name="DEvariable2" id="DEvariable2">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete2" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<div id="variable3" style="display: none">
+					<label for="DEvariable3">Variable 3</label><br />
+					<div class="variable-group">
+						<select name="DEvariable3" id="DEvariable3">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete3" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<div id="variable4" style="display: none">
+					<label for="DEvariable4">Variable 4</label><br />
+					<div class="variable-group">
+						<select name="DEvariable4" id="DEvariable4">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete4" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<div id="variable5" style="display: none">
+					<label for="DEvariable5">Variable 5</label><br />
+					<div class="variable-group">
+						<select name="DEvariable5" id="DEvariable5">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete5" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<div id="variable6" style="display: none">
+					<label for="DEvariable6">Variable 6</label><br />
+					<div class="variable-group">
+						<select name="DEvariable6" id="DEvariable6">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete6" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<div id="variable7" style="display: none">
+					<label for="DEvariable7">Variable 7</label><br />
+					<div class="variable-group">
+						<select name="DEvariable7" id="DEvariable7">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete7" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<div id="variable8" style="display: none">
+					<label for="DEvariable8">Variable 8</label><br />
+					<div class="variable-group">
+						<select name="DEvariable8" id="DEvariable8">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete8" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<div id="variable9" style="display: none">
+					<label for="DEvariable9">Variable 9</label><br />
+					<div class="variable-group">
+						<select name="DEvariable9" id="DEvariable9">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete9" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<div id="variable10" style="display: none">
+					<label for="DEvariable10">Variable 10</label><br />
+					<div class="variable-group">
+						<select name="DEvariable10" id="DEvariable10">
+							<option value="">Seleccione una opción</option>
+						</select>
+						<button type="button" id="delete10" class="delete-btn">❌</button>
+					</div>
+				</div>
+				<button type="button" id="hasVariable">
+					<span style="font-weight: 900">+</span> Agregar Variable
+				</button>
+			</form>
+		</div>
+	</body>
+</html>

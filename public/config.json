@@ -1,0 +1,175 @@
+{
+  "workflowApiVersion": "1.1",
+  "metaData": {
+    "icon": "images/sinch.png",
+    "category": "message"
+  },
+  "type": "REST",
+  "lang": {
+    "en-US": {
+
+      "name": "Custom WhatsApp Sinch",
+      "description": "Actividad para hacer envios via Sinch"
+    }
+  },
+  "arguments": {
+    "execute": {
+      "inArguments": [
+        {
+          "email": "{{InteractionDefaults.Email}}",
+          "telefono": "{{InteractionDefaults.MobileNumber}}"
+        }
+      ],
+      "outArguments": [],
+      "url": "https://marketing-automation-ca-dev-436550017470.us-central1.run.app/journeybuilder/execute",
+      "useJwt": true
+    }
+  },
+  "configurationArguments": {
+    "save": {
+      "url": "https://marketing-automation-ca-dev-436550017470.us-central1.run.app/journeybuilder/save",
+      "useJwt": true
+    },
+    "publish": {
+      "url": "https://marketing-automation-ca-dev-436550017470.us-central1.run.app/journeybuilder/publish",
+      "useJwt": true
+    },
+    "validate": {
+      "url": "https://marketing-automation-ca-dev-436550017470.us-central1.run.app/journeybuilder/validate",
+      "useJwt": true
+    }
+  },
+  "userInterfaces": {
+    "configInspector": {
+      "size": "medium"
+    }
+  },
+  "schema": {
+    "arguments": {
+      "execute": {
+        "inArguments": [
+          {
+            "telefono": {
+              "dataType": "Phone",
+              "isNullable": false,
+              "direction": "in"
+            }
+          },
+          {
+            "email": {
+              "dataType": "Email",
+              "isNullable": false,
+              "direction": "in"
+            }
+          },
+          {
+            "lineaRemitente": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "plantilla": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "imageFormat": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "imageLink": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEimagelink": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable1": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable2": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable3": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable4": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable5": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable6": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable7": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable8": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable9": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          },
+          {
+            "DEvariable10": {
+              "dataType": "string",
+              "isNullable": true,
+              "direction": "in"
+            }
+          }
+        ],
+        "outArguments": []
+      }
+    }
+  }
+}

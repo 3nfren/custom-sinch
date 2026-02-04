@@ -1,0 +1,471 @@
+'use strict';
+var util = require('util');
+
+// Deps
+const Path = require('path');
+const JWT = require(Path.join(__dirname, '..', 'lib', 'jwtDecoder.js'));
+var http = require('https');
+require('dotenv').config();
+
+exports.logExecuteData = [];
+
+function logData(req) {
+    exports.logExecuteData.push({
+        body: req.body,
+        headers: req.headers,
+        trailers: req.trailers,
+        method: req.method,
+        url: req.url,
+        params: req.params,
+        query: req.query,
+        route: req.route,
+        cookies: req.cookies,
+        ip: req.ip,
+        path: req.path,
+        host: req.hostname,
+        fresh: req.fresh,
+        stale: req.stale,
+        protocol: req.protocol,
+        secure: req.secure,
+        originalUrl: req.originalUrl
+    });
+    console.log("body: " + util.inspect(req.body));
+    console.log("headers: " + req.headers);
+    console.log("trailers: " + req.trailers);
+    console.log("method: " + req.method);
+    console.log("url: " + req.url);
+    console.log("params: " + util.inspect(req.params));
+    console.log("query: " + util.inspect(req.query));
+    console.log("route: " + req.route);
+    console.log("cookies: " + req.cookies);
+    console.log("ip: " + req.ip);
+    console.log("path: " + req.path);
+    console.log("host: " + req.hostname);
+    console.log("fresh: " + req.fresh);
+    console.log("stale: " + req.stale);
+    console.log("protocol: " + req.protocol);
+    console.log("secure: " + req.secure);
+    console.log("originalUrl: " + req.originalUrl);
+
+}
+
+/*
+ * POST Handler for / route of Activity (this is the edit route).
+ */
+exports.edit = function (req, res) {
+
+    console.log("5 -- For Edit");
+    console.log("4");
+    console.log("3");
+    console.log("2");
+    console.log("1");
+    //console.log("Edited: "+req.body.inArguments[0]);    
+
+    // Data from the req and put it in an array accessible to the main app.
+    //console.log( req.body );
+    logData(req);
+    res.status(200).send('Edit');
+};
+
+/*
+ * POST Handler for /save/ route of Activity.
+ */
+exports.save = function (req, res) {
+
+    console.log("5 -- For Save");
+    console.log("4");
+    console.log("3");
+    console.log("2");
+    console.log("1");
+    //console.log("Saved: "+req.body.inArguments[0]);
+
+    // Data from the req and put it in an array accessible to the main app.
+    console.log(req.body);
+    logData(req);
+    res.status(200).send('Save');
+
+};
+
+/*
+ * POST Handler for /execute/ route of Activity.
+ */
+exports.execute = function (req, res) {
+    console.log("🚀 EXECUTE ENDPOINT - Iniciando procesamiento");
+    console.log("📅 Timestamp:", new Date().toISOString());
+    console.log("🌐 IP:", req.ip || req.connection.remoteAddress);
+    console.log("📋 User-Agent:", req.headers['user-agent']);
+    console.log("📋 Content-Type:", req.headers['content-type']);
+    console.log("📋 Content-Length:", req.headers['content-length']);
+    console.log("🔗 URL completa:", req.originalUrl);
+    console.log("🔗 Método:", req.method);
+    console.log("🔗 Headers completos:", JSON.stringify(req.headers, null, 2));
+    
+    // ===== LOGGING AVANZADO PARA DEBUGGING =====
+    /*const fs = require('fs');
+    const logEntry = {
+        timestamp: new Date().toISOString(),
+        endpoint: 'execute',
+        method: req.method,
+        url: req.originalUrl,
+        ip: req.ip || req.connection.remoteAddress,
+        userAgent: req.headers['user-agent'],
+        contentType: req.headers['content-type'],
+        contentLength: req.headers['content-length'],
+        headers: req.headers,
+        body: req.body ? req.body.toString() : null,
+        status: 'processing'
+    };
+    
+    try {
+        fs.appendFileSync('/var/www/ca-sinch/execute-debug.log', JSON.stringify(logEntry, null, 2) + '\n\n');
+        console.log("✅ Log guardado en execute-debug.log");
+    } catch (logError) {
+        fs.appendFileSync('/var/www/ca-sinch/execute-debug.log', JSON.stringify(error, 2) + '\n\n');
+        console.error("❌ Error guardando log:", logError);
+    }*/
+    
+    console.log("5 -- For Execute");
+    console.log("4");
+    console.log("3");
+    console.log("2");
+    console.log("1");
+    //console.log("Executed: "+req.body.inArguments[0]);
+
+    // Validación crítica de variables de entorno
+    if (!process.env.jwtSecret) {
+        console.error("❌ CRÍTICO: jwtSecret no está configurado");
+        console.error("❌ Variables de entorno disponibles:");
+        console.error("   - NODE_ENV:", process.env.NODE_ENV);
+        console.error("   - PORT:", process.env.PORT);
+        console.error("   - PWD:", process.env.PWD);
+        console.error("   - USER:", process.env.USER);
+        console.error("   - HOME:", process.env.HOME);
+        console.error("❌ Archivo .env existe:", require('fs').existsSync('.env') ? "✅ SÍ" : "❌ NO");
+        console.error("❌ Archivo .env existe en /var/www/ca-sinch/:", require('fs').existsSync('/var/www/ca-sinch/.env') ? "✅ SÍ" : "❌ NO");
+        
+        /*return res.status(500).json({
+            error: "Configuración del servidor incorrecta",
+            message: "jwtSecret no está configurado. Contacta al administrador del sistema."
+        });*/
+
+        /*try {
+            fs.appendFileSync('/var/www/ca-sinch/execute-debug.log', JSON.stringify("no existe jwtSecret", 2) + '\n\n');
+            console.log("✅ Log guardado en execute-debug.log");
+        } catch (logError) {            fs.appendFileSync('/var/www/ca-sinch/execute-debug.log', JSON.stringify(logError, 2) + '\n\n');
+        }*/ // Verificar si el JWT está completo
+    if (req.body) {
+        const jwtString = req.body.toString();
+        const jwtParts = jwtString.split('.');
+        console.log("🔍 DEBUG JWT - Partes del JWT:", jwtParts.length);
+        console.log("🔍 DEBUG JWT - Header:", jwtParts[0] ? jwtParts[0].substring(0, 50) + "..." : "undefined");
+        console.log("🔍 DEBUG JWT - Payload:", jwtParts[1] ? jwtParts[1].substring(0, 50) + "..." : "undefined");
+        console.log("🔍 DEBUG JWT - Signature:", jwtParts[2] ? jwtParts[2].substring(0, 50) + "..." : "undefined");
+    }
+    }
+
+    
+    // Verificar si el JWT está completo
+    if (req.body) {
+        const jwtString = req.body.toString();
+        const jwtParts = jwtString.split('.');
+        console.log("🔍 DEBUG JWT - Partes del JWT:", jwtParts.length);
+        console.log("🔍 DEBUG JWT - Header:", jwtParts[0] ? jwtParts[0].substring(0, 50) + "..." : "undefined");
+        console.log("🔍 DEBUG JWT - Payload:", jwtParts[1] ? jwtParts[1].substring(0, 50) + "..." : "undefined");
+        console.log("🔍 DEBUG JWT - Signature:", jwtParts[2] ? jwtParts[2].substring(0, 50) + "..." : "undefined");
+    }
+    
+
+    
+    JWT(req.body, process.env.jwtSecret, (err, decoded) => {
+        console.log("🔐 CALLBACK JWT EJECUTADO");
+        console.log("🔐 Error:", err ? err.message : "Ninguno");
+        console.log("🔐 Decoded:", decoded ? "✅ SÍ" : "❌ NO");
+
+        // verification error -> unauthorized request
+        if (err) {
+            console.error("❌ JWT Error:", err.message);
+            console.error("❌ JWT Error details:", err);
+            
+            // Guardar error en log file
+            const errorLogEntry = {
+                timestamp: new Date().toISOString(),
+                endpoint: 'execute',
+                method: req.method,
+                url: req.originalUrl,
+                ip: req.ip || req.connection.remoteAddress,
+                userAgent: req.headers['user-agent'],
+                headers: req.headers,
+                body: req.body ? req.body.toString() : null,
+                status: 'jwt_error',
+                error: err.message,
+                errorDetails: err
+            };
+            
+            try {
+                fs.appendFileSync('/var/www/ca-sinch/execute-debug.log', JSON.stringify(errorLogEntry, null, 2) + '\n\n');
+                console.log("✅ Error JWT guardado en execute-debug.log");
+            } catch (logError) {
+                fs.appendFileSync('/var/www/ca-sinch/execute-debug.log', JSON.stringify(logError, null, 2) + '\n\n');
+                console.error("❌ Error guardando log de error JWT:", logError);
+            }
+            
+            return res.status(401).end();
+        }
+
+        if (decoded && decoded.inArguments && decoded.inArguments.length > 0) {
+
+            // decoded in arguments
+            var decodedArgs = decoded.inArguments[0];
+
+            console.log("Executed: "+decodedArgs);
+
+            const{
+                telefono,
+                lineaRemitente,
+                plantilla,
+                imageFormat,
+                imageLink,
+                DEimagelink,
+                DEvariable1,
+                DEvariable2,
+                DEvariable3,
+                DEvariable4,
+                DEvariable5
+            } = decodedArgs;
+
+                console.log({
+                telefono,
+                lineaRemitente,
+                plantilla,
+                imageFormat,
+                imageLink,
+                DEimagelink,
+                DEvariable1,
+                DEvariable2,
+                DEvariable3,
+                DEvariable4,
+                DEvariable5
+                });
+            // const telefono = requestBody.telefono;
+            // const lineaRemitente = requestBody.lineaRemitente;
+            // const plantilla = requestBody.plantilla;
+            // const imageOptions = requestBody.imageFormat;
+            const finalimageLink = imageLink || DEimagelink;
+            const payload = {
+                "destinations": [
+                    {
+                        "destination": telefono
+                    }
+                ],
+                "message": {
+                    "template": {
+                        "namespace": lineaRemitente,
+                        "elementName": plantilla,
+                        "header": {
+                            "image": {
+                                "type": imageFormat,
+                                "url": finalimageLink
+                            }
+                        },
+                        "bodyParameters": [
+                            DEvariable1,
+                            DEvariable2,
+                            DEvariable3
+                        ],
+                        "languagePolicy": "DETERMINISTIC",
+                        "languageCode": "ES"
+                    }
+                }
+            }
+            console.log("Outgoing payload:\n" + JSON.stringify(payload, null, 2));
+            //console.log("Sending to Sinch:", util.inspect(payload, { depth: null, colors: true }));
+
+            // Validar variables de entorno necesarias
+            if (!process.env.WS_URL || !process.env.USERNAME || !process.env.TOKEN) {
+                console.error("❌ Variables de entorno faltantes:");
+                console.error("   - WS_URL:", process.env.WS_URL ? "✅" : "❌");
+                console.error("   - USERNAME:", process.env.USERNAME ? "✅" : "❌");
+                console.error("   - TOKEN:", process.env.TOKEN ? "✅" : "❌");
+                return res.status(500).json({ error: "Configuración del servidor incompleta" });
+            }
+
+            fetch(process.env.WS_URL , {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: { 'UserName': process.env.USERNAME, 'AuthenticationToken': process.env.TOKEN,'Content-Type': 'application/json'},
+            })
+                .then((response) => {
+                    console.log("Status code:", response.status);
+                    console.log("Status:", response.statusText);
+                    return response.json();
+                })
+                .then((json) => {
+                    console.log("✅ RESPUESTA DE SINCH:", json);
+                    console.log("✅ PROCESAMIENTO COMPLETADO - Enviando respuesta");
+                    logData(req);
+                    res.status(200).send('Execute');
+                })
+                .catch(error => {
+                    console.error("❌ ERROR EN FETCH:", error);
+                    logData(req);
+                    res.status(500).json({ error: "Error al enviar mensaje" });
+                });
+        } else {
+            console.error('❌ inArguments invalid.');
+            console.error('❌ Decoded:', decoded);
+            console.error('❌ inArguments:', decoded ? decoded.inArguments : 'undefined');
+            
+            // Guardar error de inArguments en log file
+            const inArgsErrorLogEntry = {
+                timestamp: new Date().toISOString(),
+                endpoint: 'execute',
+                method: req.method,
+                url: req.originalUrl,
+                ip: req.ip || req.connection.remoteAddress,
+                userAgent: req.headers['user-agent'],
+                headers: req.headers,
+                body: req.body ? req.body.toString() : null,
+                status: 'invalid_inarguments',
+                decoded: decoded,
+                inArguments: decoded ? decoded.inArguments : 'undefined'
+            };
+            
+            try {
+                fs.appendFileSync('/var/www/ca-sinch/execute-debug.log', JSON.stringify(inArgsErrorLogEntry, null, 2) + '\n\n');
+                console.log("✅ Error inArguments guardado en execute-debug.log");
+            } catch (logError) {
+                fs.appendFileSync('/var/www/ca-sinch/execute-debug.log', JSON.stringify(logError, null, 2) + '\n\n');
+                console.error("❌ Error guardando log de inArguments:", logError);
+            }
+            
+            return res.status(400).end();
+        }
+    });
+
+    // var requestBody = req.body.inArguments[0];
+
+    // const{
+    //     telefono,
+    //     lineaRemitente,
+    //     plantilla,
+    //     imageFormat,
+    //     imageLink,
+    //     DEimagelink,
+    //     DEvariable1,
+    //     DEvariable2,
+    //     DEvariable3,
+    //     DEvariable4,
+    //     DEvariable5
+    // } = decodedArgs;
+
+    //     console.log({
+    //     telefono,
+    //     lineaRemitente,
+    //     plantilla,
+    //     imageFormat,
+    //     imageLink,
+    //     DEimagelink,
+    //     DEvariable1,
+    //     DEvariable2,
+    //     DEvariable3,
+    //     DEvariable4,
+    //     DEvariable5
+    //     });
+    // // const telefono = requestBody.telefono;
+    // // const lineaRemitente = requestBody.lineaRemitente;
+    // // const plantilla = requestBody.plantilla;
+    // // const imageOptions = requestBody.imageFormat;
+    // const finalimageLink = imageLink || DEimagelink;
+    // const payload = {
+    //     "destinations": [
+    //         {
+    //             "destination": telefono
+    //         }
+    //     ],
+    //     "message": {
+    //         "template": {
+    //             "namespace": lineaRemitente,
+    //             "elementName": plantilla,
+    //             "header": {
+    //                 "image": {
+    //                     "type": imageFormat,
+    //                     "url": finalimageLink
+    //                 }
+    //             },
+    //             "bodyParameters": [
+    //                 DEvariable1,
+    //                 DEvariable2,
+    //                 DEvariable3
+    //             ],
+    //             "languagePolicy": "DETERMINISTIC",
+    //             "languageCode": "ES"
+    //         }
+    //     }
+    // }
+    // console.log("Outgoing payload:\n" + JSON.stringify(payload, null, 2));
+    // //console.log("Sending to Sinch:", util.inspect(payload, { depth: null, colors: true }));
+
+    // fetch('https://api-messaging.wavy.global/v1/whatsapp/send', {
+    //     method: 'POST',
+    //     body: JSON.stringify(payload),
+    //     headers: { 'UserName': 'EmblueMKT', 'AuthenticationToken': 'xz4KlZVQIEQIblxFlZXVLr6qjb2b2wVKJqEaeboZ','Content-Type': 'application/json'},
+    // })
+    //     .then((response) => {
+    //         console.log("Status code:", response.status);
+    //         console.log("Status:", response.statusText);
+    //         return response.json();
+    //     })
+    //     .then((json) => console.log(json))
+    //     .catch(error => {
+    //         console.log(error)
+    //     })
+
+
+
+    // FOR TESTING
+    // logData(req);
+    // res.status(200).send('Publish');
+};
+
+
+/*
+ * POST Handler for /publish/ route of Activity.
+ */
+exports.publish = function (req, res) {
+
+    console.log("5 -- For Publish");
+    console.log("4");
+    console.log("3");
+    console.log("2");
+    console.log("1");
+    //console.log("Published: "+req.body.inArguments[0]);        
+
+    // Data from the req and put it in an array accessible to the main app.
+    //console.log( req.body );
+    logData(req);
+    res.status(200).send('Publish');
+};
+
+/*
+ * POST Handler for /validate/ route of Activity.
+ */
+exports.validate = function (req, res) {
+
+    try {
+        console.log("5 -- For Validate");
+        console.log("4");
+        console.log("3");
+        console.log("2");
+        console.log("1");
+        //console.log("Validated: "+req.body.inArguments[0]);       
+
+        // Data from the req and put it in an array accessible to the main app.
+        //console.log( req.body );
+        logData(req);
+        res.status(200).json({ message: "Validation successful" });
+    }
+    catch(e){
+        console.error("Validation error:", e);
+        res.status(500).json({ error: "Validation failed" });
+    }   
+};
