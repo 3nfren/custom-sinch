@@ -1,20 +1,16 @@
 {
-  "name": "sinch-custom",
-  "version": "0.0.0",
-  "private": true,
+  "name": "custom-sinch-activity",
+  "version": "1.0.0",
+  "main": "server.js",
   "scripts": {
-    "build": "npm start",
-     "build:prod": "npm start",
-    "start": "node ./bin/www"
+    "start": "node server.js"
   },
   "dependencies": {
-    "cookie-parser": "~1.4.4",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "dotenv": "^17.2.3",
-    "express": "^4.21.2",
-    "helmet": "^8.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "morgan": "^1.10.1"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2"
   }
 }
