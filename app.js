@@ -19,9 +19,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(helmet())
-app.use(helmet.noSniff());
-app.use(helmet.frameguard({ action: 'SAMEORIGIN' }));
+//app.use(helmet())
+//app.use(helmet.noSniff());
+//app.use(helmet.frameguard({ action: 'SAMEORIGIN' }));
 
 const cspOrigins = (process.env.CSP_ORIGINS || '')
   .split(',')
@@ -29,7 +29,7 @@ const cspOrigins = (process.env.CSP_ORIGINS || '')
   .filter(Boolean);
   
 // Activar CSP explícitamente
-app.use(
+/*app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
@@ -72,6 +72,7 @@ app.use(
   })
 );
 
+*/
 const allowlist = (process.env.CORS_ORIGINS || '')
   .split(',')
   .map(s => s.trim())
