@@ -21,21 +21,21 @@
         }
       ],
       "outArguments": [],
-      "url": "https://marketing-automation-ca-dev-436550017470.us-central1.run.app/journeybuilder/execute",
+      "url": "https://custom-sinch-409446597052.northamerica-south1.run.app/journeybuilder/execute",
       "useJwt": true
     }
   },
   "configurationArguments": {
     "save": {
-      "url": "https://marketing-automation-ca-dev-436550017470.us-central1.run.app/journeybuilder/save",
+      "url": "https://custom-sinch-409446597052.northamerica-south1.run.app/journeybuilder/save",
       "useJwt": true
     },
     "publish": {
-      "url": "https://marketing-automation-ca-dev-436550017470.us-central1.run.app/journeybuilder/publish",
+      "url": "https://custom-sinch-409446597052.northamerica-south1.run.app/journeybuilder/publish",
       "useJwt": true
     },
     "validate": {
-      "url": "https://marketing-automation-ca-dev-436550017470.us-central1.run.app/journeybuilder/validate",
+      "url": "https://custom-sinch-409446597052.northamerica-south1.run.app/journeybuilder/validate",
       "useJwt": true
     }
   },
