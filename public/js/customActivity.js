@@ -3,6 +3,13 @@ define(["postmonger"], function (Postmonger) {
 
     var connection = new Postmonger.Session();
     var payload = {};
+    // SOLUCIÓN 1: Definir los IDs que esperas procesar
+    var fieldIds = [
+        'linearemitente', 'plantilla', 'imageFormat', 'imageLink', 
+        'DEimagelink', 'DEvariable1', 'DEvariable2', 'DEvariable3', 
+        'DEvariable4', 'DEvariable5', 'DEvariable6', 'DEvariable7', 
+        'DEvariable8', 'DEvariable9', 'DEvariable10'
+    ];
 
     $(window).ready(onRender);
 
@@ -20,32 +27,20 @@ define(["postmonger"], function (Postmonger) {
         }
 
         connection.trigger('requestSchema');
+        
         connection.on('requestedSchema', function(data) {
-        const schema = data['schema'];
+            const schema = data['schema'];
+            for (var i = 0; i < schema.length; i++) {
+                let option = $('<option></option>')
+                    .attr('value', schema[i].key)
+                    .text(schema[i].name);
 
-        for (var i = 0; i < schema.length; i++) {
-            let attr = schema[i].key;
-
-            // populate select dropdown 
-            let option = $('<option></option>')
-                .attr('value', schema[i].key)
-                .text(schema[i].name);
-
-            $('#DEimagelink').append(option.clone());
-            $('#DEvariable1').append(option.clone());
-            $('#DEvariable2').append(option.clone());
-            $('#DEvariable3').append(option.clone());
-            $('#DEvariable4').append(option.clone());
-            $('#DEvariable5').append(option.clone());
-            $('#DEvariable6').append(option.clone());
-            $('#DEvariable7').append(option.clone());
-            $('#DEvariable8').append(option.clone());
-            $('#DEvariable9').append(option.clone());
-            $('#DEvariable10').append(option);
-
+                // Llenamos todos los selects con los campos de la DE
+                $('.de-select').append(option); // Tip: usa una clase en HTML para no repetir IDs
             }
         });
 
+        // Verificamos si existen argumentos previos
         var hasInArguments = Boolean(
             payload["arguments"] &&
             payload["arguments"].execute &&
@@ -53,15 +48,13 @@ define(["postmonger"], function (Postmonger) {
             payload["arguments"].execute.inArguments.length > 0
         );
 
-        var inArguments = hasInArguments ? payload["arguments"].execute.inArguments : {};
+        var inArguments = hasInArguments ? payload["arguments"].execute.inArguments : [{}];
 
-
-        $.each(inArguments, function (index, inArgument) {
-        $.each(inArgument, function (key, val) {
+        // Llenar campos con valores guardados anteriormente
+        $.each(inArguments[0], function (key, val) {
             if (fieldIds.includes(key)) {
-            $(`#${key}`).val(val);
+                $(`#${key}`).val(val);
             }
-        });
         });
 
         connection.trigger('updateButton', {
@@ -71,49 +64,40 @@ define(["postmonger"], function (Postmonger) {
         });
     }
 
-
     function save() {
+        // Obtenemos valores de la interfaz
         var lineaRemitente = $('#linearemitente').val();
         var plantilla = $('#plantilla').val();
-        var imageFormat = $('#imageFormat').val();
-        var imageLink = $('#imageLink').val();
-        var DEimagelink = $('#DEimagelink').find('option:selected').val();
-        var DEvariable1 = $('#DEvariable1').find('option:selected').val();
-        var DEvariable2 = $('#DEvariable2').find('option:selected').val();
-        var DEvariable3 = $('#DEvariable3').find('option:selected').val();
-        var DEvariable4 = $('#DEvariable4').find('option:selected').val();
-        var DEvariable5 = $('#DEvariable5').find('option:selected').val();
-        var DEvariable6 = $('#DEvariable6').find('option:selected').val();
-        var DEvariable7 = $('#DEvariable7').find('option:selected').val();
-        var DEvariable8 = $('#DEvariable8').find('option:selected').val();
-        var DEvariable9 = $('#DEvariable9').find('option:selected').val();
-        var DEvariable10 = $('#DEvariable5').find('option:selected').val();
+        
+        // SOLUCIÓN 2: Asegurar la estructura del payload antes de asignar
+        if (!payload["arguments"]) payload["arguments"] = {};
+        if (!payload["arguments"].execute) payload["arguments"].execute = {};
 
         payload["arguments"].execute.inArguments = [{
              "email": "{{InteractionDefaults.Email}}",
              "telefono": "{{InteractionDefaults.MobileNumber}}",
              "lineaRemitente": lineaRemitente,
              "plantilla": plantilla,
-             "imageFormat": imageFormat,
-             "imageLink": imageLink,
-             "DEimagelink": `{{${DEimagelink}}}`,
-             "DEvariable1": `{{${DEvariable1}}}`,
-             "DEvariable2": `{{${DEvariable2}}}`,
-             "DEvariable3": `{{${DEvariable3}}}`,
-             "DEvariable4": `{{${DEvariable4}}}`,
-             "DEvariable5": `{{${DEvariable5}}}`,
-             "DEvariable6": `{{${DEvariable6}}}`,
-             "DEvariable7": `{{${DEvariable7}}}`,
-             "DEvariable8": `{{${DEvariable8}}}`,
-             "DEvariable9": `{{${DEvariable9}}}`,
-             "DEvariable10": `{{${DEvariable10}}}`
-             }];
+             "imageFormat": $('#imageFormat').val(),
+             "imageLink": $('#imageLink').val(),
+             "DEimagelink": `{{${$('#DEimagelink').val()}}}`,
+             "DEvariable1": `{{${$('#DEvariable1').val()}}}`,
+             "DEvariable2": `{{${$('#DEvariable2').val()}}}`,
+             "DEvariable3": `{{${$('#DEvariable3').val()}}}`,
+             "DEvariable4": `{{${$('#DEvariable4').val()}}}`,
+             "DEvariable5": `{{${$('#DEvariable5').val()}}}`,
+             "DEvariable6": `{{${$('#DEvariable6').val()}}}`,
+             "DEvariable7": `{{${$('#DEvariable7').val()}}}`,
+             "DEvariable8": `{{${$('#DEvariable8').val()}}}`,
+             "DEvariable9": `{{${$('#DEvariable9').val()}}}`,
+             "DEvariable10": `{{${$('#DEvariable10').val()}}}` // Corregido el ID aquí
+        }];
 
         payload["metaData"].isConfigured = true;
 
-        console.log('InArguments:',payload["arguments"].execute.inArguments);
+        console.log('Final Payload to Save:', payload);
 
+        // Esto es lo que dispara el POST a /journeybuilder/save en tu servidor
         connection.trigger("updateActivity", payload);
     }
-
 });
