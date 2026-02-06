@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
-	<head>
-		<meta charset="utf-8" />
-		<title>Custom Journey Builder Activity</title>
-		<script type="text/javascript" src="js/jquery.min.js"></script>
-		<script
-			type="text/javascript"
-			src="js/require.js"
-			data-main="js/customActivity"
-		></script>
-		<!-- Enlace a los archivos externos de CSS y JS -->
-		<link rel="stylesheet" href="css/styles.css">
-		<script type="text/javascript" src="js/activity.js"></script>
-	</head>
+<head>
+    <meta charset="utf-8" />
+    <title>Custom Journey Builder Activity</title>
+    
+    <link rel="stylesheet" href="css/styles.css">
 
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="js/require.js"></script>
+
+    <script type="text/javascript">
+        // 4. Esta es la pieza que faltaba: Configurar las rutas de los módulos
+        requirejs.config({
+            paths: {
+                // Le decimos que cuando vea "postmonger", busque el archivo en js/postmonger.js
+                'postmonger': 'js/postmonger'
+            }
+        });
+
+        // 5. Ahora sí, cargamos tu lógica y la de los botones
+        requirejs(['js/customActivity', 'js/activity']);
+    </script>
+</head>
 	<body>
 		<div>
 			<form id="activityForm">
