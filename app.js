@@ -19,38 +19,43 @@ app.use((req, res, next) => {
 });
 
 // Configuración avanzada de seguridad para cumplir con auditoría
+// Configuración de seguridad ajustada para Journey Builder
 app.use(
   helmet({
-    // 1. Soluciona: "Falta encabezado X-Content-Type-Options"
-    noSniff: true, 
-    
-    // 2. Soluciona: "Falta de cabecera Anti-Clickjacking"
-    // frameguard: false permite que frameAncestors de CSP tome el control
-    frameguard: false, 
-
-    // 3. Soluciona: "Cabecera Content Security Policy (CSP) no configurada"
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        // Permite scripts de tu server y de Salesforce
-        scriptSrc: ["'self'", "'unsafe-inline'", "https://*.exacttarget.com", "https://*.marketingcloudapps.com"],
-        // Crucial para que Salesforce pueda embeber tu App
+        // 'unsafe-inline' es necesario para que Postmonger/jQuery funcionen en el iframe
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://*.exacttarget.com", "https://*.marketingcloudapps.com"],
+        // Esta es la parte que el cliente llama "Anti-Clickjacking"
+        // Agregamos todos los posibles subdominios de Salesforce
         frameAncestors: [
           "'self'",
           "https://*.exacttarget.com",
           "https://*.marketingcloudapps.com",
           "https://*.salesforce.com",
+          "https://*.force.com",
           "https://*.sfmc-stack.com"
         ],
-        // Soluciona el error de "inline style" que vimos en consola
         styleSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", "data:", "https:"],
-        // Permite la conexión a tu propia URL de Cloud Run
-        connectSrc: ["'self'", "https://*.northamerica-south1.run.app"]
+        connectSrc: ["'self'", "https://*.northamerica-south1.run.app", "https://*.exacttarget.com"],
       },
     },
+    // X-Content-Type-Options: nosniff (Lo pide el cliente)
+    noSniff: true,
+    // Desactivamos frameguard para que frameAncestors de arriba tome el control
+    frameguard: false, 
   })
 );
+
+// Respaldo para navegadores antiguos: permite que MC embeba la app
+// Respaldo para navegadores antiguos: permite que MC embeba la app
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://*.exacttarget.com https://*.marketingcloudapps.com https://*.salesforce.com;");
+  res.setHeader("X-Frame-Options", "ALLOW-FROM https://mc.exacttarget.com");
+  next();
+})
 
 // Respaldo para navegadores antiguos (Anti-Clickjacking)
 app.use((req, res, next) => {
