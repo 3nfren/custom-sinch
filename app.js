@@ -24,11 +24,10 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'"],
-        // 'unsafe-inline' es necesario para que Postmonger/jQuery funcionen en el iframe
-        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://*.exacttarget.com", "https://*.marketingcloudapps.com"],
-        // Esta es la parte que el cliente llama "Anti-Clickjacking"
-        // Agregamos todos los posibles subdominios de Salesforce
+        defaultSrc: ["'self'", "https://*.exacttarget.com", "https://*.marketingcloudapps.com"],
+        // Añadimos 'unsafe-inline' y 'unsafe-eval' porque RequireJS y Postmonger los necesitan
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://*.exacttarget.com", "https://*.marketingcloudapps.com", "https://*.salesforce.com"],
+        // Ampliamos los ancestros para cubrir todos los posibles stacks de Salesforce
         frameAncestors: [
           "'self'",
           "https://*.exacttarget.com",
@@ -42,20 +41,13 @@ app.use(
         connectSrc: ["'self'", "https://*.northamerica-south1.run.app", "https://*.exacttarget.com"],
       },
     },
-    // X-Content-Type-Options: nosniff (Lo pide el cliente)
     noSniff: true,
-    // Desactivamos frameguard para que frameAncestors de arriba tome el control
-    frameguard: false, 
+    frameguard: false, // Necesario para que frameAncestors funcione
   })
 );
+// Respaldo para navegadores antiguos: permite que MC embeba la app
+// Respaldo para navegadores antiguos: permite que MC embeba la app
 
-// Respaldo para navegadores antiguos: permite que MC embeba la app
-// Respaldo para navegadores antiguos: permite que MC embeba la app
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "frame-ancestors 'self' https://*.exacttarget.com https://*.marketingcloudapps.com https://*.salesforce.com;");
-  res.setHeader("X-Frame-Options", "ALLOW-FROM https://mc.exacttarget.com");
-  next();
-})
 
 // Respaldo para navegadores antiguos (Anti-Clickjacking)
 app.use((req, res, next) => {
