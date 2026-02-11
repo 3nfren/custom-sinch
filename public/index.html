@@ -5,9 +5,20 @@
     <title>Custom Journey Builder Activity</title>
     <link rel="stylesheet" href="css/styles.css">
 
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/require.js"></script>
-	<script type="text/javascript" src="js/customActivity.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="js/require.js"></script>
+
+    <script type="text/javascript">
+        // Este pequeño bloque es necesario para configurar las rutas
+        // antes de llamar al archivo principal
+        requirejs.config({
+            paths: { 'postmonger': 'js/postmonger' }
+        });
+        
+        // Aquí llamamos al archivo SIN la extensión .js
+        requirejs(['js/customActivity']);
+    </script>
 </head>
 	<body>
 		<div>
