@@ -3,7 +3,6 @@ define(["postmonger"], function (Postmonger) {
 
     var connection = new Postmonger.Session();
     var payload = {};
-    // SOLUCIÓN 1: Definir los IDs que esperas procesar
     var fieldIds = [
         'linearemitente', 'plantilla', 'imageFormat', 'imageLink', 
         'DEimagelink', 'DEvariable1', 'DEvariable2', 'DEvariable3', 
