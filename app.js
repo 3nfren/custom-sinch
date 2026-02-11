@@ -25,9 +25,8 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'", "https://*.exacttarget.com", "https://*.marketingcloudapps.com"],
-        // Añadimos 'unsafe-inline' y 'unsafe-eval' porque RequireJS y Postmonger los necesitan
+        // 'unsafe-inline' y 'unsafe-eval' son CRÍTICOS para Postmonger y RequireJS
         scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://*.exacttarget.com", "https://*.marketingcloudapps.com", "https://*.salesforce.com"],
-        // Ampliamos los ancestros para cubrir todos los posibles stacks de Salesforce
         frameAncestors: [
           "'self'",
           "https://*.exacttarget.com",
@@ -36,13 +35,13 @@ app.use(
           "https://*.force.com",
           "https://*.sfmc-stack.com"
         ],
-        styleSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"], 
         imgSrc: ["'self'", "data:", "https:"],
         connectSrc: ["'self'", "https://*.northamerica-south1.run.app", "https://*.exacttarget.com"],
       },
     },
     noSniff: true,
-    frameguard: false, // Necesario para que frameAncestors funcione
+    frameguard: false,
   })
 );
 // Respaldo para navegadores antiguos: permite que MC embeba la app

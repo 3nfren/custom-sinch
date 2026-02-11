@@ -1,3 +1,10 @@
+// 1. Configuración de rutas (Antes de cualquier otra cosa)
+requirejs.config({
+    paths: { 
+        'postmonger': 'js/postmonger' 
+    }
+});
+
 define(["postmonger"], function (Postmonger) {
     "use strict";
 
